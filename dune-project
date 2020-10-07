@@ -1,11 +1,11 @@
 (lang dune 2.7)
-(name list_available_exec)
+(name obemenu)
 (version 1.0)
 
 (generate_opam_files true)
 
 (package
-  (name list_available_exec)
+  (name obemenu)
   (depends
     ocaml
     base-unix))

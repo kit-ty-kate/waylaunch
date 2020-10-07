@@ -1,4 +1,4 @@
 (executable
   (name main)
-  (public_name list_available_exec)
-  (libraries unix))
+  (public_name obemenu)
+  (libraries unix bos))
