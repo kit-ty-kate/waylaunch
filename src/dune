@@ -1,0 +1,4 @@
+(executable
+  (name main)
+  (public_name list_available_exec)
+  (libraries unix))
