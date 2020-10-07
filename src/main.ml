@@ -1,6 +1,8 @@
 type dirname = string
 type filename = string
 
+module Filenames = Set.Make (String)
+
 let (//) = Filename.concat
 
 let get_path () : dirname list =
@@ -8,7 +10,7 @@ let get_path () : dirname list =
   Option.map (String.split_on_char ':') |>
   Option.value ~default:[]
 
-let get_executables (path : dirname list) : filename list =
+let get_executables (path : dirname list) : Filenames.t =
   List.fold_left (fun acc dirname ->
     try
       let dir = Unix.opendir dirname in
@@ -20,7 +22,7 @@ let get_executables (path : dirname list) : filename list =
           end else begin
             let fullname = dirname // filename in
             Unix.access fullname [Unix.X_OK];
-            loop (filename :: acc)
+            loop (Filenames.add filename acc)
           end
         with
         | Unix.Unix_error _ -> loop acc
@@ -29,10 +31,11 @@ let get_executables (path : dirname list) : filename list =
       loop acc
     with
     | Unix.Unix_error _ -> acc
-  ) [] path
+  ) Filenames.empty path
 
 let () =
   get_path () |>
   get_executables |>
+  Filenames.elements |>
   String.concat "\n" |>
   print_endline
