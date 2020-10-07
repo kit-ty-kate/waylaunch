@@ -40,32 +40,39 @@ let get_executables (acc : Filenames.t) : Filenames.t =
     Rresult.R.ignore_error ~use:(fun _ -> acc)
   ) acc path
 
-let exec_cmd (execs : Filenames.t) : (cmd * Bos.OS.Cmd.run_status) io =
+let exec_bemenu (execs : Filenames.t) : (cmd * Bos.OS.Cmd.run_status) io =
   let execs =
     execs |>
     Filenames.elements |>
     String.concat "\n"
   in
   Bos.OS.Cmd.in_string execs |>
-  Bos.OS.Cmd.run_io Bos.Cmd.(v "env" % "LD_LIBRARY_PATH=/usr/local/lib" % "BEMENU_BACKEND=wayland" % "bemenu" % "-l" % "5") |>
+  Bos.OS.Cmd.run_io Bos.Cmd.(v "env" % "LD_LIBRARY_PATH=/usr/local/lib" % "BEMENU_BACKEND=wayland" % "bemenu" % "-l" % "5" % "--no-exec") |>
   Bos.OS.Cmd.out_string
 
-let save_cmd (result : (cmd * Bos.OS.Cmd.run_status) io) : unit =
-  Rresult.R.ignore_error ~use:(fun _ -> ()) begin
-    history_log >>= fun history_log ->
-    result >>= function
-    | cmd, (_, `Exited 0) ->
-        history @ [cmd] |>
-        List.filteri (fun i _ -> i <= history_limit) |>
-        List.rev |>
-        Bos.OS.File.write_lines history_log
-    | _ ->
-        Ok ()
-  end
+let exec (result : (cmd * Bos.OS.Cmd.run_status)) : cmd io =
+  match result with
+  | cmd, (_, `Exited 0) ->
+      begin match Unix.fork () with
+      | 0 -> Unix.execv "/bin/sh" [|"/bin/sh";"-c";cmd|]
+      | _ -> Ok cmd
+      end
+  | _ ->
+      Rresult.R.error_msg ""
+
+let save_cmd (cmd : cmd) : unit io =
+  history_log >>= fun history_log ->
+  history @ [cmd] |>
+  List.filteri (fun i _ -> i <= history_limit) |>
+  List.rev |>
+  Bos.OS.File.write_lines history_log
 
 let () =
-  history |>
-  Filenames.of_list |>
-  get_executables |>
-  exec_cmd |>
-  save_cmd
+  Rresult.R.ignore_error ~use:(fun _ -> ()) begin
+    history |>
+    Filenames.of_list |>
+    get_executables |>
+    exec_bemenu >>=
+    exec >>=
+    save_cmd
+  end
