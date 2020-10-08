@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          # TODO: un-comment when all the conf dependencies are included in opam
+          #- macos-latest
+          - ubuntu-latest
+        ocaml-version:
+          - 4.11.1
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.opam
+          key: ${{ matrix.os }}-${{ matrix.ocaml-version }}-${{ hashFiles('*.opam') }}-build
+      - name: Set up OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1.0.1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+
+      - run: sudo apt-get install -yy -qq libwayland-client0 wayland-protocols libpangocairo-1.0-0 libxkbcommon-dev
+      - run: opam pin add -n .
+      - run: opam depext waylaunch
+      - run: opam install --deps-only --with-test .
+      - run: opam exec -- dune build
+      - run: opam exec -- dune runtest
