@@ -1,4 +1,4 @@
 (executable
   (name main)
-  (public_name obemenu)
+  (public_name waylaunch)
   (libraries unix bos bemenu_bindings))

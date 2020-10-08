@@ -5,7 +5,7 @@
 
 static struct client client = {
     .filter_mode = BM_FILTER_MODE_DMENU,
-    .title = "obemenu",
+    .title = "waylaunch",
 };
 
 static const char* result = "";
@@ -17,7 +17,7 @@ static void item_cb(const struct client *client, struct bm_item *item) {
 
 int argc = 3;
 char* argv_aux[3] = {
-    "obemenu",
+    "waylaunch",
     "-l",
     "5",
 };
