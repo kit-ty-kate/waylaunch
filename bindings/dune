@@ -1,8 +1,8 @@
 (library
-  (name bemenu_bindings)
-  (modules bemenu)
-  (foreign_stubs
-    (language c)
-    (names bemenu_bindings)
-    (flags (:standard)))
-  (libraries bemenu))
+ (name bemenu_bindings)
+ (modules bemenu)
+ (foreign_stubs
+  (language c)
+  (names bemenu_bindings)
+  (flags (:standard)))
+ (libraries bemenu))
