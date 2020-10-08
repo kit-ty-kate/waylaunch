@@ -40,19 +40,14 @@ let get_executables (acc : Filenames.t) : Filenames.t =
     Rresult.R.ignore_error ~use:(fun _ -> acc)
   ) acc path
 
-let exec_bemenu (execs : Filenames.t) : (cmd * Bos.OS.Cmd.run_status) io =
-  let execs =
-    execs |>
-    Filenames.elements |>
-    String.concat "\n"
-  in
-  Bos.OS.Cmd.in_string execs |>
-  Bos.OS.Cmd.run_io Bos.Cmd.(v "env" % "LD_LIBRARY_PATH=/usr/local/lib" % "BEMENU_BACKEND=wayland" % "bemenu" % "-l" % "5" % "--no-exec") |>
-  Bos.OS.Cmd.out_string
+let exec_bemenu (execs : Filenames.t) : cmd option =
+  match Bemenu_bindings.Bemenu.bmenu (Filenames.elements execs) with
+  | "" -> None
+  | cmd -> Some cmd
 
-let exec (result : (cmd * Bos.OS.Cmd.run_status)) : cmd io =
+let exec (result : cmd option) : cmd io =
   match result with
-  | cmd, (_, `Exited 0) ->
+  | Some cmd ->
       begin match Unix.fork () with
       | 0 -> Unix.execv "/bin/sh" [|"/bin/sh";"-c";cmd|]
       | _ -> Ok cmd
@@ -72,7 +67,7 @@ let () =
     history |>
     Filenames.of_list |>
     get_executables |>
-    exec_bemenu >>=
+    exec_bemenu |>
     exec >>=
     save_cmd
   end

@@ -1,4 +1,4 @@
 (executable
   (name main)
   (public_name obemenu)
-  (libraries unix bos))
+  (libraries unix bos bemenu_bindings))
