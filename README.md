@@ -19,6 +19,7 @@ C requirements:
   - `pkg-config`
   - `wayland-client`
   - `wayland-protocols`
+  - `libwayland-bin`
   - `cairo`
   - `pango`
   - `pangocairo`
