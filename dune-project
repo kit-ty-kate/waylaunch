@@ -21,5 +21,8 @@
     (fpath (>= 0.7.0))
     (rresult (>= 0.6.0))
     (conf-pkg-config :build)
+    (conf-libwayland :build)
+    (conf-wayland-protocols :build)
+    (conf-xkbcommon :build)
     (conf-cairo :build)
     (conf-pango :build)))

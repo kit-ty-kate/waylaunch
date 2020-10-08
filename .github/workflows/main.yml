@@ -34,7 +34,6 @@ jobs:
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
 
-      - run: sudo apt-get install -yy -qq libwayland-dev wayland-protocols libpangocairo-1.0-0 libxkbcommon-dev
       - run: opam pin add -n .
       - run: opam depext waylaunch
       - run: opam install --deps-only --with-test .

@@ -21,7 +21,6 @@ C requirements:
   - `wayland-protocols`
   - `cairo`
   - `pango`
-  - `pangocairo`
   - `xkbcommon`
 
 ## Installation
