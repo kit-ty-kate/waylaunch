@@ -23,11 +23,19 @@ C requirements:
   - `pango`
   - `xkbcommon`
 
+You can install all the requirements easily and in a way that is cross-platform using opam:
+```
+$ git submodule update --init
+$ opam pin add -n .
+$ opam depext waylaunch
+$ opam install --deps-only waylaunch
+```
+
 ## Installation
 
 To install it:
 ```
-$ dune build
+$ dune build -p waylaunch
 $ sudo $(which dune) install --prefix /usr/local --sections bin
 ```
 
