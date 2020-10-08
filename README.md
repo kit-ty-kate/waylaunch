@@ -17,9 +17,8 @@ OCaml requirements (installable via [opam](https://github.com/ocaml/opam)):
 
 C requirements:
   - `pkg-config`
-  - `wayland-client`
+  - `libwayland`
   - `wayland-protocols`
-  - `libwayland-bin`
   - `cairo`
   - `pango`
   - `pangocairo`
