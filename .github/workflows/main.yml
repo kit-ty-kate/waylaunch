@@ -38,5 +38,6 @@ jobs:
       - run: opam pin add -n .
       - run: opam depext waylaunch
       - run: opam install --deps-only --with-test .
+      - run: git submodule update --init
       - run: opam exec -- dune build
       - run: opam exec -- dune runtest
