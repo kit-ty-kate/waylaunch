@@ -45,4 +45,4 @@ This program is written in OCaml and is currently using a fork of [bemenu](https
 
 ## License
 
-Due to the use of the client library from bemenu, this whole project is licensed under GNU GPLv3
+Due to the use of the client code from bemenu, this whole project is licensed under GNU GPLv3 (and GNU LGPLv3 for bemenu's own library and bindings)
