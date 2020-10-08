@@ -17,8 +17,10 @@ let path : dirname list =
   List.map Fpath.v
 
 let history_log : filename io =
-  Bos.OS.Dir.user () >>| fun home ->
-  home // ".config" // "sway" // "cmd-history"
+  Bos.OS.Dir.user () >>= fun home ->
+  let path = home // ".config" // "waylaunch" in
+  Bos.OS.Dir.create ~path:true path >>| fun _exists ->
+  path // "history"
 
 let history_limit = 50
 
