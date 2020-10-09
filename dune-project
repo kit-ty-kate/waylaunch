@@ -2,12 +2,13 @@
 (name waylaunch)
 (version 0.1.0)
 
+(formatting disabled)
+(generate_opam_files true)
+
 (license GPLv3)
 (maintainers "Kate <kit.ty.kate@disroot.org>")
 (authors "Kate <kit.ty.kate@disroot.org>")
 (source (github kit-ty-kate/waylaunch))
-
-(generate_opam_files true)
 
 (package
   (name waylaunch)
