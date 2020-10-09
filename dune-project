@@ -2,7 +2,7 @@
 (name waylaunch)
 (version 0.1.0)
 
-(formatting disabled)
+(formatting (enabled_for dune))
 (generate_opam_files true)
 
 (license GPLv3)
