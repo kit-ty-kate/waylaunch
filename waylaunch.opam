@@ -4,7 +4,7 @@ version: "0.1.0"
 synopsis: "Waylaunch is a program launcher for Wayland"
 maintainer: ["Kate <kit.ty.kate@disroot.org>"]
 authors: ["Kate <kit.ty.kate@disroot.org>"]
-license: "GPLv3"
+license: "GPL-3.0-or-later"
 tags: ["wayland" "program" "launcher" "sway"]
 homepage: "https://github.com/kit-ty-kate/waylaunch"
 bug-reports: "https://github.com/kit-ty-kate/waylaunch/issues"

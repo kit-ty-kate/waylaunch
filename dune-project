@@ -5,7 +5,7 @@
 (formatting (enabled_for dune))
 (generate_opam_files true)
 
-(license GPLv3)
+(license GPL-3.0-or-later)
 (maintainers "Kate <kit.ty.kate@disroot.org>")
 (authors "Kate <kit.ty.kate@disroot.org>")
 (source (github kit-ty-kate/waylaunch))
