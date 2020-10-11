@@ -43,7 +43,7 @@ let get_executables (acc : Filenames.t) : Filenames.t =
   ) acc path
 
 let exec_bemenu (execs : Filenames.t) : cmd option =
-  match Bemenu_bindings.Bemenu.bmenu (Filenames.elements execs) with
+  match Bemenu_bindings.bmenu (Filenames.elements execs) with
   | "" -> None
   | cmd -> Some cmd
 

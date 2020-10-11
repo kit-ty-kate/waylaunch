@@ -1,6 +1,6 @@
 (library
  (name bemenu_bindings)
- (modules bemenu)
+ (modules bemenu_bindings)
  (foreign_stubs
   (language c)
   (names bemenu_bindings)
