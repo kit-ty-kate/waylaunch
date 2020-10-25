@@ -22,6 +22,7 @@
     (bos (>= 0.2.0))
     (fpath (>= 0.7.0))
     (rresult (>= 0.6.0))
+    result
     (conf-pkg-config :build)
     (conf-libwayland :build)
     (conf-wayland-protocols :build)
