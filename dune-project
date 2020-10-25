@@ -1,6 +1,6 @@
 (lang dune 2.7)
 (name waylaunch)
-(version 0.1.0)
+(version 0.2.0)
 
 (formatting disabled)
 (generate_opam_files true)
