@@ -1,4 +1,10 @@
 (executable
- (name main)
- (public_name waylaunch)
- (libraries unix bos bemenu_bindings))
+  (name main)
+  (public_name waylaunch)
+  (libraries
+    unix
+    bos
+    fpath
+    rresult
+    result
+    bemenu_bindings))

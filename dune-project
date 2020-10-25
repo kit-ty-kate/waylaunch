@@ -2,8 +2,9 @@
 (name waylaunch)
 (version 0.1.0)
 
-(formatting (enabled_for dune))
+(formatting disabled)
 (generate_opam_files true)
+(implicit_transitive_deps false)
 
 (license GPL-3.0-or-later)
 (maintainers "Kate <kit.ty.kate@disroot.org>")
