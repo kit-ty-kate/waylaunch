@@ -2,7 +2,7 @@ type dirname = Fpath.t
 type filename = Fpath.t
 type cmd = string
 
-type 'a io = ('a, Rresult.R.msg) result
+type 'a io = ('a, Rresult.R.msg) Rresult.result
 
 module Filenames = Set.Make (String)
 
