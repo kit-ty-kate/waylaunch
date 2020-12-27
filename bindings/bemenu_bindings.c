@@ -9,6 +9,7 @@ const char *run_menu(struct bm_menu *menu) {
     bm_menu_set_title(menu, "waylaunch");
     bm_menu_set_panel_overlap(menu, true);
     bm_menu_grab_keyboard(menu, true);
+    bm_menu_set_monitor(menu, 1); // TODO: Maybe use -1 to display on all monitors but https://github.com/Cloudef/bemenu/issues/138 is in the way
 
     enum bm_run_result status = BM_RUN_RESULT_RUNNING;
     while (status == BM_RUN_RESULT_RUNNING) {
