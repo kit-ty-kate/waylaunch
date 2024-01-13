@@ -4,11 +4,15 @@ type cmd = string
 
 type 'a io = ('a, Rresult.R.msg) Rresult.result
 
-module Filenames = Set.Make (String)
-
 let (>>=) = Rresult.(>>=)
 let (>>|) = Rresult.(>>|)
 let (//) = Fpath.(/)
+
+let list_prepend_if_not_duplicate ~eq x l =
+  if List.exists (eq x) l then
+    l
+  else
+    x :: l
 
 let path : dirname list =
   Sys.getenv_opt "PATH" |>
@@ -30,20 +34,21 @@ let history : cmd list =
     Bos.OS.File.read_lines history_log
   end
 
-let get_executables (acc : Filenames.t) : Filenames.t =
+let get_executables (acc : cmd list) : cmd list =
   List.fold_left (fun acc dir ->
     Bos.OS.Dir.fold_contents ~dotfiles:false ~elements:`Files ~traverse:`None (fun fullname acc ->
       try
         Unix.access (Fpath.to_string fullname) [Unix.X_OK];
-        Filenames.add (Fpath.filename fullname) acc
+        list_prepend_if_not_duplicate ~eq:String.equal (Fpath.filename fullname) acc
       with
       | Unix.Unix_error _ -> acc
     ) acc dir |>
     Rresult.R.ignore_error ~use:(fun _ -> acc)
-  ) acc path
+  ) acc path |>
+  List.rev
 
-let exec_bemenu (execs : Filenames.t) : cmd option =
-  match Bemenu_bindings.bmenu (Filenames.elements execs) with
+let exec_bemenu (execs : cmd list) : cmd option =
+  match Bemenu_bindings.bmenu execs with
   | "" -> None
   | cmd -> Some cmd
 
@@ -59,15 +64,25 @@ let exec (result : cmd option) : cmd io =
 
 let save_cmd (cmd : cmd) : unit io =
   history_log >>= fun history_log ->
-  history @ [cmd] |>
-  List.filteri (fun i _ -> i <= history_limit) |>
-  List.rev |>
-  Bos.OS.File.write_lines history_log
+  let history = (cmd :: history) in
+  let history =
+    let rec remove_duplicates_and_limit acc limit l =
+      match l, limit with
+      | [], _ | _, 0 -> acc
+      | x::xs, _ ->
+          remove_duplicates_and_limit
+            (list_prepend_if_not_duplicate ~eq:String.equal x acc)
+            (limit - 1)
+            xs
+    in
+    List.rev (remove_duplicates_and_limit [] history_limit history)
+  in
+  Bos.OS.File.write_lines history_log history
 
 let () =
   Rresult.R.ignore_error ~use:(fun _ -> ()) begin
     history |>
-    Filenames.of_list |>
+    List.rev |>
     get_executables |>
     exec_bemenu |>
     exec >>=
